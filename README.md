@@ -1,6 +1,11 @@
-1. Structure de l'application
-Fichier 1: index.php
-php
+# Application TodoList PHP avec Déploiement Kubernetes
+
+## Structure du Projet
+
+### Fichiers de l'Application
+
+#### 1. `index.php`
+```php
 <?php
 // Configuration de la base de données
 $db_host = getenv('DB_HOST') ?: 'mysql-service';
@@ -95,8 +100,10 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </body>
 </html>
-Fichier 2: Dockerfile
-dockerfile
+```
+
+#### 2. `Dockerfile`
+```dockerfile
 FROM php:8.1-apache
 
 # Installer les extensions PHP nécessaires
@@ -110,9 +117,14 @@ RUN chown -R www-data:www-data /var/www/html
 RUN chmod -R 755 /var/www/html
 
 EXPOSE 80
-2. Fichiers Kubernetes
-Fichier 3: mysql-configmap.yaml
-yaml
+```
+
+## Fichiers de Configuration Kubernetes
+
+### Configuration MySQL
+
+#### 3. `mysql-configmap.yaml`
+```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -120,8 +132,10 @@ metadata:
 data:
   database.name: "tododb"
   database.user: "todo_user"
-Fichier 4: mysql-secret.yaml
-yaml
+```
+
+#### 4. `mysql-secret.yaml`
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -129,8 +143,10 @@ metadata:
 type: Opaque
 data:
   database.password: "dG9kb19wYXNzd29yZA=="  # todo_password en base64
-Fichier 5: mysql-storage.yaml
-yaml
+```
+
+#### 5. `mysql-storage.yaml`
+```yaml
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -157,8 +173,10 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: manual
-Fichier 6: mysql-deployment.yaml
-yaml
+```
+
+#### 6. `mysql-deployment.yaml`
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -219,8 +237,12 @@ spec:
   - port: 3306
     targetPort: 3306
   clusterIP: None
-Fichier 7: app-configmap.yaml
-yaml
+```
+
+### Configuration de l'Application
+
+#### 7. `app-configmap.yaml`
+```yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -229,8 +251,10 @@ data:
   DB_HOST: "mysql-service"
   DB_NAME: "tododb"
   DB_USER: "todo_user"
-Fichier 8: app-secret.yaml
-yaml
+```
+
+#### 8. `app-secret.yaml`
+```yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -238,8 +262,10 @@ metadata:
 type: Opaque
 data:
   DB_PASS: "dG9kb19wYXNzd29yZA=="  # todo_password en base64
-Fichier 9: app-deployment.yaml
-yaml
+```
+
+#### 9. `app-deployment.yaml`
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -294,9 +320,12 @@ spec:
   - port: 80
     targetPort: 80
     nodePort: 30007
-3. Script de déploiement
-Fichier 10: deploy.sh
-bash
+```
+
+## Scripts de Déploiement
+
+#### 10. `deploy.sh`
+```bash
 #!/bin/bash
 
 echo "Déploiement de l'application TodoList..."
@@ -342,21 +371,10 @@ echo "Services:"
 kubectl get services
 
 echo "Pour accéder à l'application, utilisez l'adresse du nœud avec le port 30007"
-4. Ordre d'exécution
-Placer les fichiers dans /home/vagrant/app/code/
+```
 
-Rendre le script exécutable:
-
-bash
-chmod +x /home/vagrant/app/code/deploy.sh
-Exécuter le déploiement:
-
-bash
-cd /home/vagrant/app/code
-./deploy.sh
-5. Vérification
-Fichier 11: check-status.sh
-bash
+#### 11. `check-status.sh`
+```bash
 #!/bin/bash
 
 echo "=== Statut des Pods ==="
@@ -370,13 +388,50 @@ kubectl logs -l app=todoapp --tail=10
 
 echo -e "\n=== Logs de MySQL ==="
 kubectl logs -l app=mysql --tail=10
-Notes importantes:
-Le mot de passe MySQL est "todo_password" (encodé en base64)
+```
 
-L'application sera accessible sur http://<node-ip>:30007
+## Ordre d'Exécution
 
-Les données MySQL sont persistées dans /mnt/data/mysql sur le nœud
+### Étapes de Déploiement
 
-2 replicas pour l'application et 2 pour MySQL
+1. **Placer tous les fichiers dans `/home/vagrant/app/code/`**
 
-Exécutez ./deploy.sh pour déployer l'ensemble de l'application.
+2. **Rendre les scripts exécutables:**
+   ```bash
+   chmod +x /home/vagrant/app/code/deploy.sh
+   chmod +x /home/vagrant/app/code/check-status.sh
+   ```
+
+3. **Exécuter le déploiement:**
+   ```bash
+   cd /home/vagrant/app/code
+   ./deploy.sh
+   ```
+
+4. **Vérifier le statut:**
+   ```bash
+   ./check-status.sh
+   ```
+
+## Accès à l'Application
+
+L'application sera accessible via l'adresse suivante :
+```
+http://<adresse-ip-du-node>:30007
+```
+
+## Architecture du Déploiement
+
+- **2 pods** pour l'application PHP
+- **2 pods** pour MySQL
+- **ConfigMap** pour les paramètres de configuration
+- **Secret** pour les mots de passe
+- **Stockage persistant** pour la base de données
+- **Service LoadBalancer** pour l'accès externe
+
+## Notes Importantes
+
+- Mot de passe MySQL : `todo_password` (encodé en base64)
+- Les données sont persistées dans `/mnt/data/mysql` sur le nœud
+- Le port d'accès de l'application est `30007`
+- La base de données MySQL utilise le service DNS `mysql-service`

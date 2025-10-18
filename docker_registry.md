@@ -70,16 +70,3 @@ docker run -d -p 5000:5000 --restart=always --name local-registry \
 Cette méthode simple est idéale pour gérer des images Docker en local, notamment dans un environnement de développement avant un déploiement en Kubernetes.
 
 N’hésitez pas à demander si vous souhaitez un exemple avec Docker Compose ou une configuration plus avancée.
-
-[web:55][web:60][web:62]
-```
-
-[1](https://www.it-connect.fr/convertir-un-document-au-format-markdown-avec-markitdown/)
-[2](https://md2doc.com)
-[3](https://stackoverflow.com/questions/56820220/convert-a-markdown-text-file-into-a-google-document)
-[4](https://www.w3docs.com/nx/marked)
-[5](https://products.aspose.app/cells/fr/conversion/text-to-markdown)
-[6](https://monkt.com/word-to-markdown/)
-[7](https://pleasetools.com/tools/html-vers-markdown)
-[8](https://support.google.com/docs/answer/12014036?hl=en)
-[9](https://apyhub.com/utility/converter-markdown-json)

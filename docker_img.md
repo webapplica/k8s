@@ -58,17 +58,3 @@ Accédez ensuite à l’application via [translate:http://localhost:8080].
 - Ce conteneur est prêt à être déployé en Kubernetes, où ConfigMap et Secret peuvent fournir ces variables.
 
 ---
-
-Si vous le souhaitez, je peux vous aider à rédiger le manifeste Kubernetes qui déploie cette image dans un cluster.
-
-Ce processus est la méthode standard pour packager une application PHP connectée à MySQL dans Docker et Kubernetes.
-```
-
-[1](https://github.com/kauffinger/html2mkdwn/)
-[2](https://github.com/kobucom/docker-pandoc)
-[3](https://hub.docker.com/r/spawnia/md-to-pdf)
-[4](https://edu.chainguard.dev/chainguard/migration/dockerfile-conversion/)
-[5](https://dillinger.io)
-[6](https://stackoverflow.com/questions/76139495/how-can-i-export-a-markdown-file-as-a-pdf-using-the-exact-same-style-as-github)
-[7](https://manios.org/2020/01/08/convert-markdown-to-pdf-using-docker-pandoc-asciidoctor)
-[8](https://blueprints.mozilla.ai/all-blueprints/convert-documents-to-markdown-format)

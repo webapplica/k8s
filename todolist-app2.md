@@ -1,6 +1,5 @@
-C'est un plaisir de vous aider à reformater votre application TodoList en PHP/MySQL pour un déploiement sur Kubernetes (K8s) en format Markdown.
+# Application TodoList en PHP/MySQL pour un déploiement sur Kubernetes (K8s)
 
-Voici le plan d'action structuré, incluant le code de chaque fichier et les commandes de déploiement.
 
 -----
 
